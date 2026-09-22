@@ -1,0 +1,60 @@
+IF DB_ID(N'HealthcareManagement_MVC5Db') IS NULL
+    CREATE DATABASE [HealthcareManagement_MVC5Db];
+GO
+USE [HealthcareManagement_MVC5Db];
+GO
+
+CREATE TABLE Patient (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    ReferenceNumber NVARCHAR(50) NOT NULL,
+    Status NVARCHAR(30) NOT NULL,
+    CreatedDate DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE MedicalClaim (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    PatientId INT NOT NULL,
+    Amount DECIMAL(18,2) NOT NULL,
+    Status NVARCHAR(30) NOT NULL,
+    CreatedDate DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE TABLE Provider (
+    Id INT IDENTITY PRIMARY KEY,
+    ProviderNumber NVARCHAR(50) NOT NULL,
+    ProviderName NVARCHAR(150) NOT NULL,
+    Specialty NVARCHAR(100),
+    Status NVARCHAR(30) NOT NULL
+);
+CREATE TABLE Appointment (
+    Id INT IDENTITY PRIMARY KEY,
+    PatientId INT NOT NULL,
+    ProviderId INT NOT NULL,
+    AppointmentDate DATETIME2 NOT NULL,
+    Status NVARCHAR(30) NOT NULL
+);
+CREATE TABLE InsurancePolicy (
+    Id INT IDENTITY PRIMARY KEY,
+    PatientId INT NOT NULL,
+    MemberNumber NVARCHAR(50) NOT NULL,
+    PayerName NVARCHAR(150) NOT NULL,
+    EffectiveDate DATE NOT NULL,
+    ExpiryDate DATE NULL,
+    Status NVARCHAR(30) NOT NULL
+);
+CREATE TABLE Encounter (
+    Id INT IDENTITY PRIMARY KEY,
+    PatientId INT NOT NULL,
+    ProviderId INT NOT NULL,
+    EncounterDate DATETIME2 NOT NULL,
+    DiagnosisCode NVARCHAR(30),
+    Status NVARCHAR(30) NOT NULL
+);
+CREATE TABLE AuditLog (
+    Id BIGINT IDENTITY PRIMARY KEY,
+    EntityName NVARCHAR(100) NOT NULL,
+    EntityId INT NOT NULL,
+    ActionName NVARCHAR(50) NOT NULL,
+    CreatedDate DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+GO
